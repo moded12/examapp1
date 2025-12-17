@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PDF</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    html, body { height:100%; margin:0; font-family:'Tajawal',sans-serif; background:#0b1220; color:#e5e7eb }
+    .wrap { position:relative; height:100%; }
+    .wm { position:fixed; inset:0; pointer-events:none; z-index:9; opacity:.18; background-repeat:repeat; background-size:300px 240px; }
+    .bar { position:fixed; inset-inline:0; top:0; height:44px; background:#0e172a; border-bottom:1px solid #1f2a3a; display:flex; align-items:center; justify-content:space-between; padding:0 10px; z-index:10; }
+    .bar .ttl { font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80vw }
+    .bar a.btn { background:#2563eb; color:#fff; padding:6px 10px; border-radius:8px; text-decoration:none }
+    .view { position:absolute; inset:44px 0 0 0; background:#111827; display:flex; align-items:center; justify-content:center; }
+    embed, iframe { width:100%; height:100%; border:0; background:#fff }
+    .fallback { position:absolute; inset:44px 0 0 0; display:flex; align-items:center; justify-content:center; }
+    .msg { text-align:center; color:#94a3b8 }
+    .msg a { display:inline-block; margin-top:10px; padding:8px 12px; background:#2563eb; color:#fff; border-radius:8px; text-decoration:none }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <div class="ttl" id="ttl">PDF</div>
+    <a class="btn" id="openTab" href="#" target="_blank" rel="noopener">فتح في تبويب جديد</a>
+  </div>
+  <div class="wrap">
+    <div class="wm" id="wm" aria-hidden="true"></div>
+    <div class="view" id="view">
+      <embed id="emb" type="application/pdf">
+    </div>
+    <div class="fallback" id="fb" style="display:none">
+      <div class="msg" id="msg">تعذّر عرض الملف هنا.</div>
+    </div>
+  </div>
+
+  <script>
+    const q = new URLSearchParams(location.search);
+    let file = q.get('file') || '';
+    const wmText = q.get('wm') || 'اكاديمية منهاجي التعليمية';
+
+    try { file = decodeURIComponent(file); } catch {}
+    try { file = new URL(file, location.href).href; } catch {}
+    if (location.protocol === 'https:' && /^http:\/\//i.test(file)) { file = file.replace(/^http:/i, 'https:'); }
+
+    document.getElementById('ttl').textContent = (file.split('/').pop() || 'PDF');
+    document.getElementById('openTab').href = file;
+
+    function buildWM(text,{fill='#ffffff',stroke='#000',fillOpacity:.2,strokeOpacity:.18,size=24,rotate:-30}={}){
+      const t=(text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="300" height="240"><g transform="rotate(${rotate} 150 120)"><text x="150" y="128" fill="${fill}" fill-opacity="${fillOpacity}" stroke="${stroke}" stroke-opacity="${strokeOpacity}" stroke-width="1" font-size="${size}" font-family="Tajawal, Arial, sans-serif" text-anchor="middle">${t}</text></g></svg>`;
+      return 'url("data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)+'")';
+    }
+    (function applyWM(){
+      const el=document.getElementById('wm');
+      if(!wmText){ el.style.display='none'; return; }
+      el.style.display='block';
+      el.style.backgroundImage = buildWM(wmText);
+    })();
+
+    const emb = document.getElementById('emb');
+    const fb = document.getElementById('fb');
+    const msg = document.getElementById('msg');
+
+    function tryEmbed(){
+      emb.src = file + '#toolbar=1';
+      try{
+        const sameOrigin = new URL(file, location.href).origin === location.origin;
+        if(sameOrigin){
+          fetch(file, { method:'HEAD', cache:'no-store' }).then(r=>{
+            if(!r.ok){ showFallback('تعذّر تحميل الملف (HTTP '+r.status+').'); }
+            else{
+              const ct = (r.headers.get('content-type')||'').toLowerCase();
+              if(ct && !ct.includes('pdf')) showFallback('هذا الرابط لا يعيد ملف PDF.');
+            }
+          }).catch(()=>{ /* الاعتماد على المتصفح */ });
+        }
+      }catch{}
+      setTimeout(()=>{ fb.style.display = 'block'; }, 3000);
+    }
+    function showFallback(text){
+      msg.innerHTML = (text||'تعذّر عرض الملف هنا.') + '<br><a href="'+file+'" target="_blank" rel="noopener">فتح في تبويب جديد</a>';
+      fb.style.display = 'block';
+    }
+    tryEmbed();
+  </script>
+</body>
+</html>
