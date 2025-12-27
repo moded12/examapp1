@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="ar" dir="rtl" class="notranslate" translate="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>اختر مادة — امتحانات سلطنة عمان</title>
+
+  <meta name="description" content="اختر المادة الدراسية لعرض الامتحانات حسب الفصل الدراسي في منهاج سلطنة عمان.">
+
+  <!-- خط تاجوال -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+
+  <!-- ضبط تيلويند مع دعم darkMode عبر class -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { tajawal: ['Tajawal', 'system-ui', 'sans-serif'] }
+        }
+      },
+      darkMode: 'class'
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- ✅ كود AdSense الأوتوماتيكي فقط -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8971627917799044"
+          crossorigin="anonymous"></script>
+
+  <style>
+    body{
+      font-family:'Tajawal',system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .row-btn{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:#1d4ed8;
+      color:#fff;
+      padding:0.8rem 1rem;
+      border-radius:0.9rem;
+      box-shadow:0 8px 18px -10px rgba(29,78,216,.45);
+      border:1px solid rgba(255,255,255,.25);
+      transition:background .18s, transform .18s, box-shadow .18s;
+      text-align:right;
+    }
+    .row-btn:hover{
+      background:#1b47c8;
+      transform:translateY(-1px);
+      box-shadow:0 12px 24px -14px rgba(29,78,216,.55);
+    }
+    .row-btn:focus{
+      outline:3px solid rgba(59,130,246,.55);
+      outline-offset:2px;
+    }
+    .row-btn .title{
+      font-weight:800;
+      font-size:1rem;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      margin-left:0.5rem;
+    }
+    .row-btn .chev{
+      font-size:18px;
+      opacity:.95;
+    }
+    .terms-bar{
+      background:#ffffff;
+      border:1px solid #e5e7eb;
+      border-radius:0.9rem;
+      padding:0.7rem 0.9rem;
+      margin-top:0.4rem;
+    }
+    .dark .terms-bar{
+      background:#0f172a;
+      border-color:#1f2937;
+    }
+    .pill{
+      background:#1d4ed8;
+      color:#fff;
+      padding:0.45rem 0.95rem;
+      border-radius:0.8rem;
+      font-weight:800;
+      font-size:0.9rem;
+      transition:background .18s, transform .18s;
+      display:inline-flex;
+      align-items:center;
+      gap:0.35rem;
+    }
+    .pill:hover{
+      background:#1b47c8;
+      transform:translateY(-1px);
+    }
+    .mode-btn{
+      background:#e2e8f0;
+      color:#0f172a;
+      padding:0.35rem 0.65rem;
+      border-radius:0.7rem;
+      font-weight:700;
+      font-size:0.8rem;
+    }
+    .mode-btn:hover{ background:#cbd5e1; }
+    .dark .mode-btn{
+      background:#1f2937;
+      color:#e5e7eb;
+    }
+    .dark .mode-btn:hover{
+      background:#334155;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 to-slate-100 text-slate-800 dark:from-slate-900 dark:to-slate-950 dark:text-slate-100">
+
+  <!-- هيدر ثابت أعلى الصفحة -->
+  <header class="sticky top-0 z-20 bg-white/95 dark:bg-slate-900/95 border-b border-blue-100 dark:border-slate-800 shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <button id="goBackBtn" class="mode-btn" type="button" title="رجوع خطوة">⬅️</button>
+        <h1 class="text-base sm:text-xl md:text-2xl font-extrabold text-blue-800 dark:text-blue-300 flex items-center gap-1">
+          <span class="hidden sm:inline">🇴🇲</span>
+          <span>امتحانات منهاج سلطنة عمان</span>
+        </h1>
+      </div>
+      <div class="flex items-center gap-3 text-xs sm:text-sm">
+        <a id="homeLink" href="#" class="text-blue-700 dark:text-blue-300 hover:underline">
+          الرئيسية
+        </a>
+        <button id="toggleTheme" class="mode-btn" type="button" title="الوضع الداكن">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- المحتوى -->
+  <main class="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-5 sm:py-7">
+    <div class="text-center mb-5 sm:mb-7">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+        اختر مادة
+      </h2>
+      <div id="gradeHdr" class="mt-2 text-sm sm:text-base text-slate-700 dark:text-slate-300"></div>
+      <p class="text-[12px] sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
+        اضغط على اسم المادة لعرض الفصل الأول أو الثاني، ثم اختر الفصل لعرض الامتحانات.
+      </p>
+    </div>
+
+    <!-- قائمة المواد -->
+    <div id="subjectsList" class="space-y-3 sm:space-y-4"></div>
+
+    <!-- رسالة أسفل القائمة -->
+    <div id="msg" class="mt-6 text-center text-sm text-slate-600 dark:text-slate-400"></div>
+  </main>
+
+  <!-- فوتر -->
+  <footer class="bg-slate-900 text-white py-3 mt-auto">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center text-xs sm:text-sm">
+      © <span id="yr"></span> جميع الحقوق محفوظة | امتحانات منهاج سلطنة عمان
+    </div>
+  </footer>
+
+  <script>
+  // سنة الفوتر
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // حسبة HOME_URL ديناميكياً
+  const pathName = location.pathname,
+        marker = '/student/';
+  const baseStudent = pathName.includes(marker)
+    ? pathName.slice(0, pathName.indexOf(marker) + marker.length)
+    : pathName.replace(/[^/]*$/,'');
+  const HOME_URL = new URL(baseStudent + '../', location.origin).href;
+  document.getElementById('homeLink').href = HOME_URL;
+
+  // زر الرجوع
+  document.getElementById('goBackBtn').addEventListener('click', () => {
+    if (history.length > 1) history.back();
+    else location.href = HOME_URL;
+  });
+
+  // وضع الليل/النهار
+  (function initTheme(){
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark' || (!saved && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+    document.getElementById('toggleTheme').addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme',
+        document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+      );
+    });
+  })();
+
+  const API = baseStudent + '../admin.php';
+
+  const params = new URLSearchParams(location.search);
+  const gradeNo = +params.get('grade_no') || null;
+  const gradeIdParam = +params.get('grade_id') || null;
+
+  async function apiGet(action, p = {}) {
+    const u = new URL(API, location.origin);
+    u.searchParams.set('action', action);
+    Object.entries(p).forEach(([k,v]) => {
+      if (v !== '' && v != null) u.searchParams.set(k, v);
+    });
+    const r = await fetch(u, { cache: 'no-store' });
+    const t = await r.text();
+    let j;
+    try { j = JSON.parse(t); }
+    catch { throw new Error('استجابة غير صالحة من الخادم'); }
+    if (j.ok === false) throw new Error(j.error || 'حدث خطأ أثناء تحميل البيانات');
+    return j;
+  }
+
+  function gradeNameFromNo(n){
+    const a = ['','الأول','الثاني','الثالث','الرابع','الخامس','السادس','السابع','الثامن','التاسع','العاشر','الحادي عشر','الثاني عشر'];
+    return n >= 1 && n <= 12 ? 'الصف ' + a[n] : '';
+  }
+
+  let grade = null;
+
+  async function resolveGrade(){
+    const g = await apiGet('get_grades');
+    const rows = g.data || [];
+    if (gradeIdParam) {
+      grade = rows.find(x => +x.id === gradeIdParam);
+      return;
+    }
+    grade = rows.find(x => +x.grade_no === gradeNo)
+         || rows.find(x => (x.name_ar || '').includes(gradeNameFromNo(gradeNo).replace('الصف ','')));
+  }
+
+  function closeOtherTerms(exceptId){
+    document.querySelectorAll('[data-terms]').forEach(el => {
+      if (el.id !== ('t_' + exceptId)) el.classList.add('hidden');
+    });
+  }
+
+  async function loadSubjects(){
+    try {
+      await resolveGrade();
+      const hdr = document.getElementById('gradeHdr');
+      if (!grade) {
+        hdr.textContent = 'تعذّر تحديد الصف. الرجاء الرجوع واختيار الصف مرة أخرى.';
+        return;
+      }
+
+      hdr.innerHTML =
+        'الصف: <span class="font-extrabold text-blue-700 dark:text-blue-300">'
+        + (grade.name_ar || gradeNameFromNo(gradeNo))
+        + '</span>';
+
+      const res = await apiGet('get_subjects_by_grade', { grade_id: grade.id });
+      const list = res.data || [];
+      const box = document.getElementById('subjectsList');
+      box.innerHTML = '';
+
+      if (!list.length) {
+        document.getElementById('msg').textContent = 'لا توجد مواد مسجلة لهذا الصف حتى الآن.';
+        return;
+      }
+
+      list.forEach(sub => {
+        const wrap = document.createElement('div');
+        wrap.className = "subject-item";
+
+        wrap.innerHTML = `
+          <button class="row-btn" type="button" data-sub="${sub.id}">
+            <span class="title">${sub.name_ar}</span>
+            <span class="chev">›</span>
+          </button>
+          <div class="terms-bar hidden mt-1" id="t_${sub.id}" data-terms>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-slate-700 dark:text-slate-300 font-semibold text-sm">الفصل:</span>
+              <a class="pill" href="exams.html?grade_id=${grade.id}&subject_id=${sub.id}&term_no=1">الأول</a>
+              <a class="pill" href="exams.html?grade_id=${grade.id}&subject_id=${sub.id}&term_no=2">الثاني</a>
+            </div>
+          </div>
+        `;
+
+        const btn   = wrap.querySelector('.row-btn');
+        const terms = wrap.querySelector('[data-terms]');
+
+        btn.addEventListener('click', () => {
+          const open = !terms.classList.contains('hidden');
+          closeOtherTerms(sub.id);
+          terms.classList.toggle('hidden', open);
+          if (!open) {
+            terms.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        });
+
+        box.appendChild(wrap);
+      });
+
+    } catch (e) {
+      document.getElementById('msg').textContent = 'حدث خطأ أثناء تحميل المواد: ' + e.message;
+      console.error(e);
+    }
+  }
+
+  loadSubjects();
+  </script>
+</body>
+</html>
