@@ -1,0 +1,545 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl" class="notranslate" translate="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>العناوين — امتحانات سلطنة عمان</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{ --hdrH:64px; --ftrH:56px; --bg-from:#eff6ff; --bg-to:#e5e7eb; --text:#0f172a; --footer:#0b1220; }
+    .dark{ --bg-from:#0b1220; --bg-to:#0f172a; --text:#e5e7eb; --footer:#0b1220; }
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Tajawal',sans-serif;
+      color:var(--text);
+      background:linear-gradient(135deg,var(--bg-from),var(--bg-to));
+      padding-top:var(--hdrH);
+      padding-bottom:calc(var(--ftrH) + 12px);
+    }
+    header.site-hd{
+      position:fixed;
+      inset-inline:0;
+      top:0;
+      height:var(--hdrH);
+      background:#fff;
+      border-bottom:2px solid #dbeafe;
+      z-index:30
+    }
+    .dark header.site-hd{ background:#0f172a; border-bottom-color:#1e293b }
+    footer.site-ft{
+      position:fixed;
+      inset-inline:0;
+      bottom:0;
+      height:var(--ftrH);
+      background:var(--footer);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:20
+    }
+    .mode-btn{
+      background:#e2e8f0;
+      color:#0f172a;
+      padding:6px 10px;
+      border-radius:10px;
+      font-weight:700
+    }
+    .mode-btn:hover{ background:#cbd5e1 }
+    .dark .mode-btn{ background:#1f2937; color:#e5e7eb }
+    .dark .mode-btn:hover{ background:#334155 }
+
+    .row-btn{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:#1d4ed8;
+      color:#fff;
+      padding:14px 16px;
+      border-radius:12px;
+      box-shadow:0 8px 18px -10px rgba(29,78,216,.45);
+      border:1px solid rgba(255,255,255,.25);
+      transition:background .18s, transform .18s, box-shadow .18s;
+      text-align:right;
+    }
+    .row-btn:hover{ background:#1b47c8; transform:translateY(-1px); box-shadow:0 12px 24px -14px rgba(29,78,216,.55) }
+    .row-btn:focus{ outline:3px solid rgba(59,130,246,.55); outline-offset:2px }
+    .row-btn .title{
+      font-weight:800;
+      font-size:1.02rem;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      margin-left:8px
+    }
+    .row-btn .meta{ font-size:.8rem; opacity:.95 }
+
+    body.ov-open{ overflow:hidden }
+    .ov{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.65);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:1000
+    }
+    .ov.show{display:flex}
+    .ov .box{
+      background:#0b1220;
+      color:#e5e7eb;
+      width:min(1200px,96vw);
+      height:min(92svh,940px);
+      border-radius:18px;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      box-shadow:0 24px 60px rgba(0,0,0,.40), 0 0 0 1px rgba(255,255,255,.06) inset;
+      outline:1px solid rgba(255,255,255,.06);
+    }
+    .ov header{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      justify-content:space-between;
+      padding:10px 12px;
+      background:#0e172a;
+      border-bottom:1px solid #1f2a3a;
+    }
+    .ov header h3{
+      margin:0;
+      font-size:15px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis
+    }
+    .ov header .btn{
+      background:#1f2937;
+      color:#e5e7eb;
+      border:0;
+      padding:6px 10px;
+      border-radius:8px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .ov header .btn:hover{ background:#273244 }
+    .ov header .btn.close{ background:#ef4444 }
+    .ov header .btn.close:hover{ background:#dc2626 }
+    .ov .body{
+      flex:1;
+      display:grid;
+      grid-template-columns:1fr 300px;
+      min-height:0
+    }
+    .ov .body.no-side{ grid-template-columns:1fr }
+    .ov .viewer{
+      position:relative;
+      background:#0b1220;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:0;
+      min-width:0;
+      min-height:0;
+    }
+    .ov .viewer iframe,.ov .viewer embed{
+      width:100%;
+      height:100%;
+      border:0;
+      background:white
+    }
+    .ov .viewer img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      background:#0b1220
+    }
+    .ov .side{border-left:1px solid #1f2a3a; overflow:auto; background:#0b1220}
+    .ov .side.hidden{ display:none }
+    .ov .file-item{
+      padding:12px;
+      border-bottom:1px solid #1f2a3a;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:8px
+    }
+    .ov .file-item:hover{background:#101a2e}
+    .wm{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:9;
+      opacity:.22;
+      background-repeat:repeat;
+      background-size:300px 240px;
+    }
+    .loading{ color:#94a3b8; font-size:.95rem }
+    .loading::after{ content:' ...'; animation: dots 1s steps(3,end) infinite }
+    @keyframes dots{
+      0%{content:''}
+      33%{content:'.'}
+      66%{content:'..'}
+      100%{content:'...'}
+    }
+    .toast {
+      position: fixed;
+      inset-inline: 0;
+      top: 12px;
+      display:flex;
+      justify-content:center;
+      z-index: 2000;
+    }
+    .toast > div {
+      background:#0b1220;
+      color:#fff;
+      padding:10px 14px;
+      border-radius:10px;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      font-size:.95rem
+    }
+    .ad-block{ margin:18px auto; }
+    .ad-safe-gap{ height:12px; }
+  </style>
+</head>
+<body>
+  <header class="site-hd">
+    <div class="container mx-auto px-6 h-full flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <button id="goBackBtn" class="mode-btn !bg-slate-200 dark:!bg-slate-800" type="button" title="رجوع خطوة">⬅️</button>
+        <a id="homeLink" href="#" class="text-lg md:text-2xl font-extrabold text-blue-800 dark:text-blue-300 hover:underline decoration-2">
+          🇴🇲 امتحانات منهاج سلطنة عمان
+        </a>
+      </div>
+      <div class="flex items-center gap-3">
+        <nav class="text-sm">
+          <a id="bcSubjects" href="#" class="text-blue-700 dark:text-blue-300 hover:underline">المواد</a>
+        </nav>
+        <button id="toggleTheme" class="mode-btn" type="button" title="الوضع الداكن">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-6 py-6">
+    <div class="text-center mb-6">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+        العناوين
+      </h2>
+      <div id="hdr" class="mt-2 text-slate-700 dark:text-slate-300"></div>
+      <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">اضغط على أي زر لفتح المرفقات.</p>
+    </div>
+
+    <div class="ad-safe-gap"></div>
+
+    <div id="list" class="space-y-3"></div>
+    <div id="msg" class="mt-8 text-center text-slate-600 dark:text-slate-400"></div>
+  </main>
+
+  <footer class="site-ft">
+    <div class="container mx-auto px-6 text-center text-sm">
+      © <span id="yr"></span> جميع الحقوق محفوظة | امتحانات منهاج سلطنة عمان
+    </div>
+  </footer>
+
+  <!-- نافذة المرفقات -->
+  <div id="ov" class="ov" aria-modal="true" role="dialog">
+    <div class="box">
+      <header>
+        <div class="flex items-center gap-3 min-w-0">
+          <button class="btn close" onclick="closeOv()">إغلاق</button>
+          <h3 id="ov_title" class="truncate" title=""></h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="openTab" class="btn" type="button" title="فتح في تبويب">↗️ فتح</button>
+          <button id="downloadFile" class="btn" type="button" title="تنزيل">⬇️ تنزيل</button>
+          <button id="toggleSide" class="btn" type="button" title="إظهار/إخفاء قائمة الملفات">📁 الملفات</button>
+        </div>
+      </header>
+      <div id="ovBody" class="body no-side">
+        <div id="viewer" class="viewer">
+          <div id="wm" class="wm" aria-hidden="true"></div>
+          لا يوجد ملف
+        </div>
+        <div id="filesSide" class="side hidden"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  const pathName = location.pathname;
+  const marker = '/student/';
+  const baseStudent = pathName.includes(marker)
+    ? pathName.slice(0, pathName.indexOf(marker) + marker.length)
+    : pathName.replace(/[^/]*$/, '');
+  const HOME_URL = new URL(baseStudent + '../', location.origin).href;
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  (function initTheme(){
+    const saved = localStorage.getItem('theme');
+    if(saved==='dark' || (!saved && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)){
+      document.documentElement.classList.add('dark');
+    }
+    document.getElementById('toggleTheme').addEventListener('click', ()=>{
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark')?'dark':'light');
+    });
+  })();
+
+  (function navHelpers(){
+    const back = document.getElementById('goBackBtn');
+    const homeLink = document.getElementById('homeLink');
+    homeLink.href = HOME_URL;
+    back.addEventListener('click', ()=>{
+      if (window.history.length > 1) window.history.back();
+      else location.href = HOME_URL;
+    });
+  })();
+
+  const API = baseStudent + '../admin.php';
+
+  const p = new URLSearchParams(location.search);
+  const grade_id = +p.get('grade_id'),
+        subject_id = +p.get('subject_id'),
+        term_no = +p.get('term_no');
+
+  const DEFAULT_WM = 'اكاديمية منهاجي التعليمية';
+
+  async function apiGet(action, obj={}){
+    try{
+      const u=new URL(API,location.origin); u.searchParams.set('action',action);
+      Object.entries(obj).forEach(([k,v])=>{ if(v!==''&&v!=null) u.searchParams.set(k,v);});
+      const r=await fetch(u,{cache:'no-store'});
+      const t=await r.text();
+      let j; try{ j=JSON.parse(t); }catch{ j={ok:false, error:'invalid json', raw:t}; }
+      return j;
+    }catch(e){ return {ok:false, error:e.message}; }
+  }
+
+  const absUrl = (pth)=>{ try{ return new URL(pth, location.origin).href }catch{ return pth } };
+
+  function iconOf(mime,path){
+    const mm=(mime||'').toLowerCase(), pth=(path||'').toLowerCase();
+    if(mm.includes('pdf')||/\.pdf(\?|$)/i.test(pth)) return '📕';
+    if(mm.includes('image')||/\.(png|jpg|jpeg|webp|gif)(\?|$)/i.test(pth)) return '🖼️';
+    if(mm==='link'||pth.startsWith('http')) return '🔗';
+    return '📄';
+  }
+
+  const isPDF = (mime, url)=> (mime||'').toLowerCase().includes('pdf') || /\.pdf(\?|$)/i.test(url||'');
+
+  // فتح PDF مباشرة في تبويب جديد (أفضل للموبايل)
+  function openPdfDirect(fileUrl) {
+    try {
+      const abs = new URL(fileUrl, location.origin).href;
+      window.open(abs, '_blank', 'noopener');
+    } catch {
+      window.open(fileUrl, '_blank', 'noopener');
+    }
+  }
+
+  function applyWatermark(text){
+    const el = document.getElementById('wm');
+    if(!el) return;
+    if(!text){
+      el.style.display='none';
+      el.style.backgroundImage='none';
+      return;
+    }
+    el.style.display='block';
+    el.style.backgroundImage = buildWatermarkSVG(text);
+  }
+
+  function buildWatermarkSVG(text, {fill='#ffffff', stroke='#000000', fillOpacity=0.22, strokeOpacity=0.22, size=26, rotate=-30}={}){
+    const t = (text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="300" height="240">
+        <g transform="rotate(${rotate} 150 120)">
+          <text x="150" y="128"
+            fill="${fill}" fill-opacity="${fillOpacity}"
+            stroke="${stroke}" stroke-opacity="${strokeOpacity}" stroke-width="1"
+            font-size="${size}" font-family="Tajawal, Arial, sans-serif" text-anchor="middle">
+            ${t}
+          </text>
+        </g>
+      </svg>`;
+    return 'url("data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg) + '")';
+  }
+
+  function openOv(title, files){
+    window.__files = files || [];
+    document.getElementById('ov_title').textContent = title;
+    document.getElementById('ov_title').title = title;
+    const ov = document.getElementById('ov');
+    const bodyEl = document.getElementById('ovBody');
+    const side = document.getElementById('filesSide');
+    side.classList.add('hidden');
+    bodyEl.classList.add('no-side');
+    ov.classList.add('show');
+    document.body.classList.add('ov-open');
+    renderViewer(window.__files[0]);
+    renderSide(window.__files);
+    applyWatermark(DEFAULT_WM);
+  }
+
+  function closeOv(){
+    window.currentFileUrl='';
+    document.getElementById('ov').classList.remove('show');
+    document.body.classList.remove('ov-open');
+  }
+
+  window.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ closeOv(); } });
+
+  document.getElementById('toggleSide').addEventListener('click', ()=>{
+    const side = document.getElementById('filesSide');
+    const bodyEl = document.getElementById('ovBody');
+    const show = side.classList.contains('hidden');
+    side.classList.toggle('hidden', !show);
+    bodyEl.classList.toggle('no-side', !show);
+  });
+
+  // عرض الملف داخل المودال (مع فتح PDF خارجيًا)
+  async function renderViewer(file){
+    const v = document.getElementById('viewer');
+    if (!file) {
+      v.innerHTML = '<div class="text-slate-300">لا يوجد ملف</div>';
+      return;
+    }
+
+    const mime = (file.mime || '').toLowerCase();
+    const raw  = (file.path || file.file_path || '').trim();
+    const path = absUrl(raw);
+    window.currentFileUrl = path;
+
+    const wmEl = document.getElementById('wm');
+
+    // الصور: نعرضها داخل المودال
+    const isImage = mime.includes('image') || /\.(png|jpg|jpeg|webp|gif)(\?|$)/i.test(path);
+    if (isImage) {
+      v.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = path; img.alt = '';
+      v.appendChild(img);
+      v.appendChild(wmEl);
+
+      document.getElementById('openTab').disabled = false;
+      document.getElementById('downloadFile').disabled = false;
+      document.getElementById('openTab').onclick = ()=> window.open(path, '_blank', 'noopener');
+      document.getElementById('downloadFile').onclick = ()=> window.open(path, '_blank');
+      return;
+    }
+
+    // PDF: لا نستخدم iframe، فقط زر يفتح مباشرة في تبويب جديد
+    const pdf = isPDF(mime, path);
+    if (pdf) {
+      v.innerHTML = `
+        <div class="flex flex-col items-center justify-center text-slate-200 gap-3 px-4 text-center">
+          <div>لأفضل عرض خاصة على الهاتف، سيتم فتح ملف الـ PDF في تبويب جديد.</div>
+          <button type="button"
+            class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-500"
+            id="openPdfInsideBtn">
+            فتح الامتحان الآن
+          </button>
+        </div>
+      `;
+      v.appendChild(wmEl);
+
+      const btnInside = document.getElementById('openPdfInsideBtn');
+      btnInside.onclick = ()=> openPdfDirect(path);
+
+      document.getElementById('openTab').disabled = false;
+      document.getElementById('downloadFile').disabled = false;
+      document.getElementById('openTab').onclick = ()=> openPdfDirect(path);
+      document.getElementById('downloadFile').onclick = ()=> openPdfDirect(path);
+      return;
+    }
+
+    // أنواع أخرى: رابط عادي
+    v.innerHTML = `<div class="text-center"><a class="px-4 py-2 rounded bg-blue-600 text-white" href="${path}" target="_blank" rel="noopener">فتح في تبويب جديد</a></div>`;
+    v.appendChild(wmEl);
+    document.getElementById('openTab').disabled = false;
+    document.getElementById('downloadFile').disabled = false;
+    document.getElementById('openTab').onclick = ()=> window.open(path, '_blank', 'noopener');
+    document.getElementById('downloadFile').onclick = ()=> window.open(path, '_blank');
+  }
+
+  function renderSide(files){
+    const s=document.getElementById('filesSide'); s.innerHTML='';
+    if(!files||!files.length){
+      s.innerHTML='<div class="p-4 text-slate-400">لا مرفقات</div>';
+      return;
+    }
+    files.forEach((f)=>{
+      const pth=f.path||f.file_path||'';
+      const d=document.createElement('div');
+      d.className='file-item';
+      d.innerHTML=`<span>${iconOf(f.mime,pth)}</span><span class="truncate">${(pth.split('/').pop()||'ملف')}</span>`;
+      d.addEventListener('click',()=> renderViewer(f));
+      s.appendChild(d);
+    });
+  }
+
+  async function loadExams(){
+    if(!grade_id||!subject_id||!term_no){
+      document.getElementById('msg').textContent='معاملات ناقصة.';
+      return;
+    }
+
+    (async ()=>{
+      const grades = await apiGet('get_grades');
+      const gRow=(grades.data||[]).find(x=>+x.id===grade_id);
+      const subs = await apiGet('get_subjects_by_grade',{grade_id});
+      const sRow=(subs.data||[]).find(x=>+x.id===subject_id);
+      document.getElementById('homeLink').href = HOME_URL;
+      document.getElementById('bcSubjects').href=`subjects.html?grade_id=${grade_id}`;
+      document.getElementById('hdr').innerHTML=
+        `الصف: <span class="font-extrabold text-blue-700 dark:text-blue-300">${gRow?gRow.name_ar:''}</span>
+         • المادة: <span class="font-extrabold">${sRow?sRow.name_ar:''}</span>
+         • الفصل: <span class="font-extrabold">${term_no}</span>`;
+    })();
+
+    document.getElementById('msg').textContent='... جارٍ تحميل العناوين';
+    const res = await apiGet('list_exams',{grade_id,subject_id,term_no});
+    const data = (res && (res.data||res.rows)) || [];
+    const list = (data||[]).map(ex=>{
+      const title = ex.title || ex.exam_title || ex.name || 'بدون عنوان';
+      const exam_date = ex.exam_date || '';
+      let files = [];
+      if(ex.files) files = (ex.files||[]).map(f=>({
+        path:f.path||f.file_path||f.url||'',
+        mime:f.mime||f.type||''
+      })).filter(x=>x.path);
+      return { title, exam_date, files };
+    });
+
+    const box=document.getElementById('list'); box.innerHTML='';
+    if(!list.length){
+      document.getElementById('msg').textContent='لا توجد عناوين لهذا الاختيار حالياً.';
+      return;
+    }
+    document.getElementById('msg').textContent='';
+
+    list.forEach(ex=>{
+      const files=ex.files||[];
+      const btn=document.createElement('button');
+      btn.type='button';
+      btn.className='row-btn';
+      btn.innerHTML=`<span class="title">${ex.title}</span><span class="meta">${files.length} ملف${ex.exam_date?(' • '+ex.exam_date):''}</span>`;
+      btn.addEventListener('click',()=> openOv(ex.title, files));
+      box.appendChild(btn);
+    });
+  }
+
+  (async function init(){
+    await loadExams();
+  })();
+  </script>
+</body>
+</html>
